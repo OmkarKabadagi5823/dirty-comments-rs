@@ -8,6 +8,6 @@ pub trait Component {
 
 impl Debug for dyn Component {
     fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
-        write!(f, "Component{{{}}}", self.fmt())
+        write!(f, "Component {{ {} }}", self.fmt())
     }
 }

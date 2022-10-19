@@ -27,6 +27,6 @@ impl Component for UnidedComment {
     }
 
     fn fmt(&self) -> String {
-        format!("UnidedComment{{comment: {:?}}}", self.comment)
+        format!("{:?}", self)
     }
 }

@@ -29,6 +29,6 @@ impl Component for IdedComment {
     }
 
     fn fmt(&self) -> String {
-        format!("IdedComment{{id: {}, comment: {:?}}}", self.id, self.comment)
+        format!("{:?}", self)
     }
 }

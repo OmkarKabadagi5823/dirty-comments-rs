@@ -4,13 +4,15 @@ use crate::core::components::Component;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Marker {
-    id: String
+    id: String,
+    line: usize
 }
 
 impl Marker {
-    pub fn new(id: String) -> Self {
+    pub fn new(id: String, line: usize) -> Self {
         Marker {
-            id
+            id,
+            line
         }
     }
 }
@@ -25,6 +27,6 @@ impl Component for Marker {
     }
 
     fn fmt(&self) -> String {
-        format!("Marker{{id: {}}}", self.id)
+        format!("{:?}", self)
     }
 }
