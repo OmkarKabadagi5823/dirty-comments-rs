@@ -17,13 +17,12 @@ pub fn parse<P: AsRef<Path>>(file_path: P) -> Result<Vec<Box<dyn Component>>, Er
     let file = OpenOptions::new()
         .read(true)
         .open(&file_path)?;
-
-
-    let tag_regex = TagRegex::new();
-    let mut comments: Vec<Box<dyn Component>> = Vec::new();
     
-    let mut buf = String::new();
     let mut reader = BufReader::new(file);
+    let mut buf = String::new();
+    
+    let mut comments: Vec<Box<dyn Component>> = Vec::new();
+    let tag_regex = TagRegex::new();
     
     let mut line_number = 0;
     let mut in_comment = false;
@@ -59,7 +58,7 @@ pub fn parse<P: AsRef<Path>>(file_path: P) -> Result<Vec<Box<dyn Component>>, Er
             } else if tag_regex.contains_tag("MARKER", &buf) {
                 let id = tag_regex.contains_id("MARKER", &buf)
                     .expect("A uuid was expected but not found");
-                comments.push(Box::new(Marker::new(id)));
+                comments.push(Box::new(Marker::new(id, line_number)));
                 buf.clear();
             } else {
                 buf.clear();
@@ -69,9 +68,7 @@ pub fn parse<P: AsRef<Path>>(file_path: P) -> Result<Vec<Box<dyn Component>>, Er
         line_number += 1;
     }
 
+    dbg!("{:?}", &comments);
 
-    for comment in comments.iter() {
-        println!("{:#?}", comment.as_ref());
-    }
     Ok(comments)
 }
