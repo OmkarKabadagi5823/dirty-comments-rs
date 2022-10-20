@@ -1,6 +1,5 @@
 use serde::{Serialize, Deserialize};
 
-use crate::core::types::Comment;
 use crate::core::components::Component;
 
 #[derive(Debug, Serialize, Deserialize)]
