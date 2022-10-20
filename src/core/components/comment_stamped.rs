@@ -21,7 +21,10 @@ impl CommentStamped {
 
 impl Component for CommentStamped {
     fn has_id(&self) -> bool {
-        true
+        match &self.id {
+            Some(_) => true,
+            None => false,
+        }
     }
 
     fn id(&self) -> Option<&String> {
