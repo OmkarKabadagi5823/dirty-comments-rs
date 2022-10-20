@@ -4,48 +4,52 @@ use crate::core::types::Comment;
 use crate::core::components::Component;
 
 #[derive(Debug, Serialize, Deserialize)]
-pub struct Marker {
-    id: String,
-    line: usize
+pub struct CommentStamped {
+    id: Option<String>,
+    pub comment: Comment,
 }
 
-impl Marker {
-    pub fn new(id: String, line: usize) -> Self {
-        Marker {
+impl CommentStamped {
+    pub fn new(id: Option<String>, comment: Comment) -> Self {
+        CommentStamped {
             id,
-            line
+            comment,
         }
     }
+    
 }
 
-impl Component for Marker {
+impl Component for CommentStamped {
     fn has_id(&self) -> bool {
         true
     }
 
     fn id(&self) -> Option<&String> {
-        Some(&self.id)
+        match &self.id {
+            Some(id) => Some(id),
+            None => None,
+        }
     }
 
     fn set_id(&mut self, id: String) -> bool {
-        self.id = id;
+        self.id = Some(id);
         true
     }
 
     fn has_text(&self) -> bool {
-        false
+        true
     }
 
     fn text(&self) -> Option<&String> {
-        None
+        Some(&self.comment.text)
     }
 
     fn text_start(&self) -> Option<usize> {
-        None
+        Some(self.comment.start)
     }
 
     fn text_end(&self) -> Option<usize> {
-        None
+        Some(self.comment.end)
     }
 
     fn fmt(&self) -> String {
