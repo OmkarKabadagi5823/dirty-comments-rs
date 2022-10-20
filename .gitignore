@@ -1,5 +1,5 @@
 target/
 debug/
 Cargo.lock
-test_proj
+test_proj/*
 !test_proj/file1.py
