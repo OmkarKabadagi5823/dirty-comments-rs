@@ -65,4 +65,9 @@ where
             }
         }
     }
+
+    while reader.read_line(&mut buf).unwrap() > 0 {
+        tmp_file.write_all(buf.as_bytes()).unwrap();
+        buf.clear();
+    }
 }
