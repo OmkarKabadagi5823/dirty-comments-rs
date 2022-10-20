@@ -35,9 +35,9 @@ pub fn parse<P: AsRef<Path>>(file_path: P) -> Result<Vec<Box<dyn Component>>, Er
                 let end = line_number;
                 
                 if let Some(id) = comment_id.take() {
-                    comments.push(Box::new(IdedComment::new(id, Comment::new(start, end, buf.clone()))));
+                    comments.push(Box::new(CommentStamped::new(Some(id), Comment::new(start, end, buf.clone()))));
                 } else {
-                    comments.push(Box::new(UnidedComment::new(Comment::new(start, end, buf.clone()))));
+                    comments.push(Box::new(CommentStamped::new(None, Comment::new(start, end, buf.clone()))));
                 }
         
                 in_comment = false;
