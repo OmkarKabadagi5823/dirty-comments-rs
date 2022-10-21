@@ -7,16 +7,23 @@ use std::{
     }
 };
 
-use uuid::Uuid;
+use crate::{
+    parser, 
+    core::{
+        components::Component,
+        utils::*
+    }
+};
 
 const TMP_FILE_PATH: &str = "/tmp/dirty_comments_tmp";
 
-use crate::{parser, core::components::Component};
 
 pub fn remove<P: AsRef<Path>>(file_path: P) -> Result<(), Error> {
     let tmp_file_path = String::from(TMP_FILE_PATH);
 
-    let components = parser::parse(&file_path).unwrap();
+    let mut components = parser::parse(&file_path).unwrap();
+    make_all_components_ided(&mut components);
+
     filter_contents_into_tmp(&file_path, &tmp_file_path, &components);
     fs::copy(&tmp_file_path, &file_path)?;
 
@@ -56,13 +63,9 @@ where
                 line_number += 1;
             }
     
-            if let Some(id) = component.id() {
-                let marker = format!("# !dcm-{}\n", id);
-                tmp_file.write_all(marker.as_bytes()).unwrap();
-            } else {
-                let marker = format!("# !dcm-{}\n", Uuid::new_v4().simple().to_string());
-                tmp_file.write_all(marker.as_bytes()).unwrap();
-            }
+
+            let marker = format!("# !dcm-{}\n", component.id().expect("Component should have an id"));
+            tmp_file.write_all(marker.as_bytes()).unwrap();
         }
     }
 
