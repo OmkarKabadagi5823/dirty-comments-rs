@@ -40,7 +40,7 @@ impl Component for Marker {
     }
 
     fn text_start(&self) -> Option<usize> {
-        None
+        Some(self.line)
     }
 
     fn text_end(&self) -> Option<usize> {
