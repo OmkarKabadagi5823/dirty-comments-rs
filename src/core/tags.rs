@@ -1,11 +1,6 @@
 use std::collections::HashMap;
 use regex::Regex;
-
-mod tags {
-    pub const OPENING: &str = "dco";
-    pub const CLOSING: &str = "dcc";
-    pub const MARKER: &str = "dcm";
-}
+use crate::tags;
 
 pub struct TagRegex {
     regexes: HashMap<String, Regex>,
