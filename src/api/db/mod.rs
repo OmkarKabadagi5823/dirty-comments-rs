@@ -1,3 +1,3 @@
-pub mod storage;
+pub mod comment_db;
 
-pub use storage::Storage;
+pub use comment_db::CommentDB;
