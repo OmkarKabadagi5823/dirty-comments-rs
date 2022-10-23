@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+
 use crate::core::{
     components::{
         Component,
@@ -33,4 +35,21 @@ pub fn component_vec_to_comment(component_vec: &Vec<Box<dyn Component>>) -> Vec<
     }
 
     comment_vec
+}
+
+pub fn comment_vec_to_hashmap(comment_vec: Vec<CommentStamped>) -> HashMap<String, CommentStamped> {
+    let mut comment_map: HashMap<String, CommentStamped> = HashMap::new();
+
+    for comment in comment_vec.iter() {
+        comment_map.insert(comment.id().unwrap().clone(), CommentStamped::new(
+            Some(comment.id().unwrap().clone()),
+            Comment::new(
+                comment.text_start().unwrap(),
+                comment.text_end().unwrap(),
+                comment.text().unwrap().clone()
+            )
+        ));
+    }
+
+    comment_map
 }
