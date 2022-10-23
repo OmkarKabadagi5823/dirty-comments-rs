@@ -7,18 +7,17 @@ use std::{
 use walkdir::WalkDir;
 
 use crate::{
-    api::db::Storage,
     parser, 
     core::{
         components::Component,
         utils::*
     },
+    api::db::CommentDB,
+    dir
 };
 
-const TMP_FILE_PATH: &str = "/tmp/dirty_comments_tmp";
-
-pub fn remove_all(storage: &Storage) {
-    for entry in WalkDir::new(storage.proj_dir()) {
+pub fn remove_all(comment_db: &CommentDB) {
+    for entry in WalkDir::new(comment_db.proj_dir()) {
         let entry = entry.unwrap();
 
         if entry.metadata().unwrap().is_file() {
@@ -30,18 +29,15 @@ pub fn remove_all(storage: &Storage) {
             };
 
             make_all_components_ided(&mut components);
-            let comment_vec = component_vec_to_comment(&components);
 
-            if comment_vec.len() > 0 {
-                storage.compare_and_add(&PathBuf::from(entry.path()), comment_vec);
-                remove(&entry.path(), &components).unwrap();
-            }
+            comment_db.put(&PathBuf::from(entry.path()), &components);
+            remove(&entry.path(), &components).unwrap();
         }
     }
 }
 
 pub fn remove<P: AsRef<Path>>(file_path: P, components: &Vec<Box<dyn Component>>) -> Result<(), Error> {
-    let tmp_file_path = String::from(TMP_FILE_PATH);
+    let tmp_file_path = String::from(dir::TMP_FILE_PATH);
 
     filter_contents_into_tmp(&file_path, &tmp_file_path, &components);
     fs::copy(&tmp_file_path, &file_path)?;
